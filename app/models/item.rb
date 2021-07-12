@@ -2,10 +2,7 @@ class Item < ApplicationRecord
   with_options presence: true do
     validates :trade_name
     validates :explanation
-    validates :price, numericality: { with: /\A[0-9]+\z/, message: 'is invalid. Input half-width characters' }
-    validates :price,
-              numericality: { only_integer: true, greater_than_or_equal_to: 300, less_than_or_equal_to: 9_999_999,
-                              message: 'is out of setting range' }
+    validates :price, numericality: {　only_integer: true, message: 'is invalid. Input half-width characters' }
 
     with_options numericality: { other_than: 1, message: "can't be blank" } do
       validates :category_id
@@ -15,7 +12,8 @@ class Item < ApplicationRecord
       validates :days_to_ship_id
     end
   end
-
+  validates :price,numericality: { greater_than_or_equal_to: 300, less_than_or_equal_to: 9_999_999,
+                              message: 'is out of setting range' }
   validate :image_presence
 
   def image_presence
