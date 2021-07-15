@@ -12,8 +12,8 @@ class Item < ApplicationRecord
       validates :days_to_ship_id
     end
   end
-  validates :price,numericality: { greater_than_or_equal_to: 300, less_than_or_equal_to: 9_999_999,
-                              message: 'is out of setting range' }
+  validates :price, numericality: { greater_than_or_equal_to: 300, less_than_or_equal_to: 9_999_999,
+                                    message: 'is out of setting range' }
   validate :image_presence
 
   def image_presence
