@@ -2,7 +2,7 @@ class OrdersController < ApplicationController
   before_action :authenticate_user!, only: [:index, :create]
   before_action :set_item,           only: [:index, :create]
   before_action :move_to_index,      only: [:index, :create]
-  before_action :move_to_index_2,    only: [:index, :create]
+
   def index
     @order_address = OrderAddress.new
   end
@@ -25,11 +25,9 @@ class OrdersController < ApplicationController
   end
 
   def move_to_index
-    redirect_to root_path if current_user == @item.user
-  end
-
-  def move_to_index_2
-    redirect_to root_path if user_signed_in? && @item.order.present?
+    if current_user == @item.user || @item.order.present?
+      redirect_to root_path
+    end
   end
 
   def order_params
@@ -41,9 +39,9 @@ class OrdersController < ApplicationController
   def pay_order_address
     Payjp.api_key = ENV['PAYJP_SECRET_KEY']
     Payjp::Charge.create(
-      amount: @item.price,  # 商品の値段
-      card: order_params[:token], # カードトークン
-      currency: 'jpy'                 # 通貨の種類（日本円）
+      amount: @item.price,
+      card: order_params[:token],
+      currency: 'jpy'
     )
   end
 end

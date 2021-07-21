@@ -74,6 +74,24 @@ RSpec.describe OrderAddress, type: :model do
         expect(@order_address.errors.full_messages).to include('Phone number is too short')
       end
 
+      it 'phone_numberが半角数字12文字以上では、出品できない' do
+        @order_address.phone_number = '123456789101'
+        @order_address.valid?
+        expect(@order_address.errors.full_messages).to include('Phone number is too long')
+      end
+
+      it 'phone_numberは数字のみでないと、出品できない' do
+        @order_address.phone_number = '12345abcde'
+        @order_address.valid?
+        expect(@order_address.errors.full_messages).to include('Phone number is invalid. Input only number')
+      end
+
+      it 'phone_numberが全角文字では、出品できない' do
+        @order_address.phone_number = '１２３４５６７８９０１'
+        @order_address.valid?
+        expect(@order_address.errors.full_messages).to include('Phone number is invalid. Input only number')
+      end
+
       it 'userが紐付いていないと保存できないこと' do
         @order_address.user_id = nil
         @order_address.valid?
