@@ -7,7 +7,7 @@ RSpec.describe OrderAddress, type: :model do
     @order_address = FactoryBot.build(:order_address, user_id: user.id, item_id: item.id)
     sleep 0.1 # 0.1秒待機
   end
-
+  
   describe '購入機能の保存' do
     context '出品できる場合' do
       it '全ての値が正しく入力されていれば、出品できる' do
