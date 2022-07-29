@@ -16,7 +16,7 @@
 ### Association
 
 - has_many :items
-- has_many :purchases
+- has_many :orders
 
 ## items テーブル
 
@@ -35,7 +35,9 @@
 ### Association
 
 - belongs_to :user
-- has_one :purchase
+- has_one :order
+- has_many :item_tag_relations
+- has_many :tags, through: item_tag_relations
 
 ## orders テーブル
 
@@ -64,4 +66,27 @@
 
 ### Association
 
-- belongs_to :purchase
+- belongs_to :order
+
+## tags
+
+| Column           | Type       | Options                        |
+| ---------------- | ---------- | ------------------------------ |
+| tag_name         | string     | null: false, uniqueness: true  |
+
+### Association
+
+- has_many :item_tag_relations
+- has_many :items, through: item_tag_relations
+
+## item_tag_relations
+
+| Column           | Type       | Options                        |
+| ---------------- | ---------- | ------------------------------ |
+| item             | reference  | null: false                    |
+| tag              | reference  | null: false                    |
+
+### Association
+
+- belongs_to :item
+- belongs_to :tag

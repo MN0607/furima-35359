@@ -8,16 +8,28 @@ class ItemsController < ApplicationController
   end
 
   def new
-    @item = Item.new
+    @item_tag = ItemsTag.new
+
+    # 当初のコード
+    #@item = Item.new
   end
 
   def create
-    @item = Item.new(item_params)
-    if @item.save
+    @item_tag = ItemsTag.new(item_tag_params)
+    if @item_tag.valid?
+      @item_tag.save
       redirect_to root_path
     else
       render :new
     end
+
+    # 当初のコード
+    #@item = Item.new(item_params)
+    #if @item.save
+      #redirect_to root_path
+    #else
+      #render :new
+    #end
   end
 
   def show
@@ -38,11 +50,21 @@ class ItemsController < ApplicationController
     redirect_to root_path if @item.destroy
   end
 
+  def search
+    return nil if params[:keyword] == ""
+    tag = Tag.where(['tag_name LIKE ?', "%#{params[:keyword]}%"] )
+    render json:{ keyword: tag }
+  end
+
   private
 
+  def item_tag_params
+    params.require(:items_tag).permit(:trade_name, :explanation, :price, :category_id, :status_id, :shipping_charge_id, :prefecture_id, :days_to_ship_id, :tag_name, :image).merge(user_id: current_user.id)
+  end
+  
   def item_params
     params.require(:item).permit(:trade_name, :explanation, :category_id, :status_id, :shipping_charge_id, :prefecture_id,
-                                 :days_to_ship_id, :price, :image).merge(user_id: current_user.id)
+                                 :days_to_ship_id, :price, :image, :tag_name).merge(user_id: current_user.id)
   end
 
   def get_item_params
